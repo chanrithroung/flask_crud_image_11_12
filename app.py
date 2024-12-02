@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, jsonify
+from flask import Flask, render_template, url_for, request, jsonify, redirect
 from pymysql import MySQLError, connect
 from datetime import datetime
 import os
@@ -11,6 +11,8 @@ def connect_db():
     return connect(
         host="localhost", # or 127.0.0.1
         port=3307,
+        user="root",
+        passwd="",
         database="flask_crud_image",
         ssl={"disable": True} 
     )
@@ -32,7 +34,14 @@ def add_product():
 
 @app.route("/index")
 def index():
-    return render_template('index.html')
+    con = connect_db()
+    cursor = con.cursor()
+    cursor.execute("SELECT * FROM `products` ORDER BY `id` DESC;")
+    products = cursor.fetchall()
+
+    # return jsonify(products)
+
+    return render_template('index.html', products=products)
 
 
 @app.route('/admin-dashboard')
@@ -45,9 +54,24 @@ def addProduct():
     if request.method == "POST":
         name = request.form['name']
         source_file = request.files['thumbnail']
+        price = request.form['price']
+        qty = request.form['qty']
         thumbnail = upload_file(sourcefile=source_file)
+        description = request.form['description']
+
+        sql = f"""
+           INSERT INTO `products`(`name`, `price`, `qty`, `thumbnail`, `description`) 
+           VALUES ('{name}','{price}','{qty}','{thumbnail}','{description}')
+        """
+        # return sql
+
+        con = connect_db()
+        cursor = con.cursor()
+        cursor.execute(sql)
+        con.commit()
+
         
-        return jsonify({"name": name})
+        return redirect('/')
 
 
 if __name__ == '__main__':

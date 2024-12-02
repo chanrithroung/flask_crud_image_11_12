@@ -9,6 +9,15 @@
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
         crossorigin="anonymous"
     />
+    <style>
+      .card-text {
+        overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 5; /* number of lines to show */
+              line-clamp: 2; 
+      -webkit-box-orient: vertical;
+      }
+    </style>
     <title>Document</title>
 </head>
 <body>
@@ -58,36 +67,19 @@
 
     <div class="container p-4">
         <div class="row justify-content-center">
+            {% for product in products %}
             <div class="col-3">
                 <div class="card" style="width: 18rem;">
-                    <img src="..." class="card-img-top" alt="...">
+                    <img src="http://127.0.0.1:5000/static/uploads/{{ product[4] }}" class="card-img-top" alt="...">
                     <div class="card-body">
-                      <h5 class="card-title">Card title</h5>
-                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                      <h5 class="card-title">{{product[1]}}</h5>
+                      <div class="alert alert-success">Price: {{product[2]}}$</div>
+                      <p class="card-text">{{product[5]}}</p>
                       <a href="#" class="btn btn-primary">Go somewhere</a>
                     </div>
                   </div>
             </div>
-            <div class="col-3">
-                <div class="card" style="width: 18rem;">
-                    <img src="..." class="card-img-top" alt="...">
-                    <div class="card-body">
-                      <h5 class="card-title">Card title</h5>
-                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                      <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
-                  </div>
-            </div>
-            <div class="col-3">
-                <div class="card" style="width: 18rem;">
-                    <img src="..." class="card-img-top" alt="...">
-                    <div class="card-body">
-                      <h5 class="card-title">Card title</h5>
-                      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                      <a href="#" class="btn btn-primary">Go somewhere</a>
-                    </div>
-                  </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
     

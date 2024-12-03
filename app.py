@@ -72,6 +72,31 @@ def addProduct():
 
         
         return redirect('/')
+    
+
+@app.route('/list-products')
+def list_product():
+    con = connect_db()
+    cursor = con.cursor()
+    cursor.execute("SELECT * FROM `products`")
+    products = cursor.fetchall()
+
+    return render_template('list-product.html', products=products)
+
+
+
+@app.route('/edit/<id>', methods=["GET", "POST"])
+def edit_product(id):
+    con = connect_db()
+    cursor = con.cursor()
+    cursor.execute(f"SELECT * FROM `products` WHERE `id` = '{id}' ")
+    product = cursor.fetchall()
+
+    
+    return render_template('edit-product.html', product=product)
+    
+
+
 
 
 if __name__ == '__main__':

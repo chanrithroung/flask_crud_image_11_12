@@ -24,8 +24,9 @@
       <div class="row justify-content-center">
         <div class="col-6 rounded shadow p-5">
           <h2 class="mb-4 text-primary">Admin Edit Product</h2>
-          <form action="  " method="post" enctype="multipart/form-data">
+          <form action="{{ url_for('submit_edit') }}" method="post" enctype="multipart/form-data">
             <div class="mb-2">
+              <input value="{{ product[0][0] }}" type="hidden" name="id">
               <label for="">Product name</label>
               <input name="name" class="form-control" type="text" value="{{ product[0][1] }}" />
             </div>
@@ -39,6 +40,7 @@
             </div>
             
             <div class="mb-2">
+              <input value="{{ product[0][4] }}"  name="old-thumbnail" type="hidden">
               <label for="">Thumbnail</label>
               <input name="thumbnail" class="form-control" type="file" />
             </div>

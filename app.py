@@ -80,8 +80,9 @@ def list_product():
     cursor = con.cursor()
     cursor.execute("SELECT * FROM `products`")
     products = cursor.fetchall()
-
     return render_template('list-product.html', products=products)
+
+
 
 
 
@@ -95,10 +96,32 @@ def edit_product(id):
     
     return render_template('edit-product.html', product=product)
     
+@app.route("/submit-edit", methods=["GET", "POST"])
+def submit_edit():
+    if request.method == "POST":
+        id          = request.form['id']
+        name        = request.form['name']
+        price       = request.form['price']
+        qty         =  request.form['qty']
+        thumbnail   = request.files['thumbnail']
+        description = request.form['description']
 
+        if thumbnail:
+            thumbnail = upload_file(sourcefile=thumbnail)
+        else:
+            thumbnail = request.form['old-thumbnail']
+        
+        sql = f"""
+           UPDATE `products` SET `name` = '{name}', `price` = '{price}', `qty` = '{qty}', `thumbnail` = '{thumbnail}', `description` = '{description}' WHERE `id` = '{id}';
+        """
+        # return sql
 
+        con = connect_db()
+        cursor = con.cursor()
+        cursor.execute(sql)
+        con.commit()
 
-
+        return redirect('list-products')
 if __name__ == '__main__':
     app.run(debug=True)
 
